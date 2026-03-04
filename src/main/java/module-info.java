@@ -37,6 +37,7 @@ module org.update4j {
 
     requires transitive java.xml;
     requires static jdk.zipfs;
+    requires java.logging;
 
     uses org.update4j.service.Delegate;
     uses org.update4j.service.UpdateHandler;

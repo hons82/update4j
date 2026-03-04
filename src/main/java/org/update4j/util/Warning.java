@@ -17,7 +17,6 @@ package org.update4j.util;
 
 import java.nio.file.FileSystemException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.update4j.service.Launcher;
 
@@ -210,7 +209,7 @@ public class Warning {
 
         String humanReadable = sysMods.size() == 1 ? "'" + sysMods.get(0) + "' and has" : "system modules that have";
         String plural = sysMods.size() == 1 ? "it" : "them";
-        String commaSeparated = sysMods.stream().collect(Collectors.joining(","));
+        String commaSeparated = String.join(",", sysMods);
 
         logger.log(WARNING, "As a fundamental restriction to the Java Module System,\n"
                         + "\tdynamically loaded modules cannot resolve system modules\n"

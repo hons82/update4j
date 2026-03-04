@@ -1,8 +1,6 @@
 package org.update4j;
 
 import org.junit.jupiter.api.Test;
-import org.update4j.util.FileUtils;
-import org.update4j.util.FilenameMatch;
 
 import java.io.File;
 import java.net.URI;
@@ -32,7 +30,7 @@ public class TestFileMetadata {
                 () -> placeholderBuilder().os(null).arch(currentArch).build().appliesToCurrentPlatform());
     }
 
-    private FileMetadata.Builder placeholderBuilder() {
+    private static FileMetadata.Builder placeholderBuilder() {
         return FileMetadata.builder().uri(URI.create("http://localhost/placeholder")).path(new File("/tmp/placeholder").toPath());
     }
 }

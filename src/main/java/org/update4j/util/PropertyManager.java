@@ -330,7 +330,7 @@ public class PropertyManager {
     private static Map<String, String> resolveDependencies(Map<String, String> properties) {
         Map<String, String> noDeps = new HashMap<>();
 
-        while (properties.size() > 0) {
+        while (!properties.isEmpty()) {
             int noDepsSize = noDeps.size();
             List<Map.Entry<String, String>> found = new ArrayList<>();
 

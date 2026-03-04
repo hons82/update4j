@@ -39,8 +39,7 @@ public abstract class XmlMapper {
 
         for (char c : orig.toCharArray()) {
             if (c == 0x0 || c == 0xfffe || c == 0xffff || (c >= 0xd800 && c <= 0xdfff) || c > 0x0ffff) {
-                continue;
-            } else if (c == '\'') {
+			} else if (c == '\'') {
                 builder.append("&apos;");
             } else if (c == '"') {
                 builder.append("&quot;");
@@ -51,7 +50,7 @@ public abstract class XmlMapper {
             } else if (c == '>') {
                 builder.append("&gt;");
             } else if (c <= 0x1f) {
-                builder.append("&#" + ((int) c) + ";");
+                builder.append("&#").append((int)c).append(";");
             } else {
                 builder.append(c);
             }

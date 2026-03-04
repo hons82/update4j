@@ -116,13 +116,17 @@ public class FileMapper extends XmlMapper {
         NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node n = children.item(i);
-            if ("addExports".equals(n.getNodeName())) {
-                parseExports(n.getChildNodes());
-            } else if ("addOpens".equals(n.getNodeName())) {
-                parseOpens(n.getChildNodes());
-            } else if ("addReads".equals(n.getNodeName())) {
-                parseReads(n.getChildNodes());
-            }
+			switch (n.getNodeName()) {
+				case "addExports":
+					parseExports(n.getChildNodes());
+					break;
+				case "addOpens":
+					parseOpens(n.getChildNodes());
+					break;
+				case "addReads":
+					parseReads(n.getChildNodes());
+					break;
+			}
         }
     }
 
@@ -170,22 +174,22 @@ public class FileMapper extends XmlMapper {
         builder.append("        <file");
 
         if (uri != null) {
-            builder.append(" uri=\"" + escape(uri) + "\"");
+            builder.append(" uri=\"").append(escape(uri)).append("\"");
         }
         if (path != null) {
-            builder.append(" path=\"" + escape(path) + "\"");
+            builder.append(" path=\"").append(escape(path)).append("\"");
         }
         if (size != null) {
-            builder.append(" size=\"" + size + "\"");
+            builder.append(" size=\"").append(size).append("\"");
         }
         if (checksum != null) {
-            builder.append(" checksum=\"" + escape(checksum) + "\"");
+            builder.append(" checksum=\"").append(escape(checksum)).append("\"");
         }
         if (os != null) {
-            builder.append(" os=\"" + os.getShortName() + "\"");
+            builder.append(" os=\"").append(os.getShortName()).append("\"");
         }
         if(arch != null) {
-            builder.append(" arch=\"" + arch + "\"");
+            builder.append(" arch=\"").append(arch).append("\"");
         }
         if (classpath != null && classpath) {
             builder.append(" classpath=\"true\"");
@@ -194,13 +198,13 @@ public class FileMapper extends XmlMapper {
             builder.append(" modulepath=\"true\"");
         }
         if (comment != null) {
-            builder.append(" comment=\"" + escape(comment) + "\"");
+            builder.append(" comment=\"").append(escape(comment)).append("\"");
         }
         if (ignoreBootConflict != null && ignoreBootConflict) {
             builder.append(" ignoreBootConflict=\"true\"");
         }
         if (signature != null) {
-            builder.append(" signature=\"" + escape(signature) + "\"");
+            builder.append(" signature=\"").append(escape(signature)).append("\"");
         }
 
         if (!addExports.isEmpty() || !addOpens.isEmpty() || !addReads.isEmpty()) {
@@ -212,8 +216,8 @@ public class FileMapper extends XmlMapper {
 
                 for (AddPackage ap : addExports) {
                     builder.append("                <exports");
-                    builder.append(" package=\"" + escape(ap.getPackageName()) + "\"");
-                    builder.append(" target=\"" + escape(ap.getTargetModule()) + "\"/>\n");
+                    builder.append(" package=\"").append(escape(ap.getPackageName())).append("\"");
+                    builder.append(" target=\"").append(escape(ap.getTargetModule())).append("\"/>\n");
                 }
 
                 builder.append("            </addExports>\n");
@@ -224,8 +228,8 @@ public class FileMapper extends XmlMapper {
 
                 for (AddPackage ap : addOpens) {
                     builder.append("                <opens");
-                    builder.append(" package=\"" + escape(ap.getPackageName()) + "\"");
-                    builder.append(" target=\"" + escape(ap.getTargetModule()) + "\"/>\n");
+                    builder.append(" package=\"").append(escape(ap.getPackageName())).append("\"");
+                    builder.append(" target=\"").append(escape(ap.getTargetModule())).append("\"/>\n");
                 }
 
                 builder.append("            </addOpens>\n");
@@ -236,7 +240,7 @@ public class FileMapper extends XmlMapper {
 
                 for (String r : addReads) {
                     builder.append("                <reads");
-                    builder.append(" module=\"" + escape(r) + "\"/>\n");
+                    builder.append(" module=\"").append(escape(r)).append("\"/>\n");
                 }
 
                 builder.append("            </addReads>\n");

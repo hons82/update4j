@@ -27,7 +27,7 @@ public class MapMapper extends XmlMapper {
     }
 
     private MapMapper(Node node, String name) {
-        map = new HashMap<String, String>();
+        map = new HashMap<>();
         this.name = name;
         parse(node);
     }
@@ -58,17 +58,20 @@ public class MapMapper extends XmlMapper {
             return "<" + name + "/>";
 
         StringBuilder builder = new StringBuilder();
-        builder.append("<" + name + ">\n");
+        builder.append("<").append(name).append(">\n");
 
         for (Map.Entry<String, String> item : map.entrySet()) {
             if (item.getKey() == null || item.getValue() == null)
                 continue;
 
-            builder.append("    <item key=\"" + escape(item.getKey()) + "\" value=\"" + escape(item.getValue())
-                            + "\"/>\n");
+            builder.append("    <item key=\"")
+				.append(escape(item.getKey()))
+				.append("\" value=\"")
+				.append(escape(item.getValue()))
+				.append("\"/>\n");
         }
 
-        builder.append("</" + name + ">");
+        builder.append("</").append(name).append(">");
 
         return builder.toString();
     }

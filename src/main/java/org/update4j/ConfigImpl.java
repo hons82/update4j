@@ -15,6 +15,8 @@
  */
 package org.update4j;
 
+import static java.lang.System.Logger.Level.WARNING;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +62,8 @@ import org.update4j.util.StringUtils;
 import org.update4j.util.Warning;
 
 class ConfigImpl {
+
+    private static final System.Logger logger = System.getLogger(ConfigImpl.class.getName());
 
     private ConfigImpl() {
     }
@@ -219,7 +223,7 @@ class ConfigImpl {
 
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(WARNING, e.getMessage(), e);
             }
             Warning.lock(t);
 
@@ -386,7 +390,7 @@ class ConfigImpl {
                 try {
                     Files.deleteIfExists(options.getArchiveLocation());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.log(WARNING, e.getMessage(), e);
                 }
             }
 
@@ -575,7 +579,7 @@ class ConfigImpl {
 
         Set<ModuleDescriptor> moduleDescriptors = finder.findAll()
                         .stream()
-                        .map(mr -> mr.descriptor())
+                        .map(ModuleReference::descriptor)
                         .collect(Collectors.toSet());
 
         // Warn if any module requires an unresolved system module
@@ -583,7 +587,7 @@ class ConfigImpl {
             Set<String> resolvedSysMods = ModuleLayer.boot()
                             .modules()
                             .stream()
-                            .map(m -> m.getName())
+                            .map(Module::getName)
                             .collect(Collectors.toSet());
 
             List<String> missingSysMods = new ArrayList<>();
@@ -603,9 +607,8 @@ class ConfigImpl {
                     }
                 }
             }
-            if (missingSysMods.size() > 0)
+            if (!missingSysMods.isEmpty())
                 Warning.unresolvedSystemModules(missingSysMods);
-
         }
 
         List<String> moduleNames = moduleDescriptors.stream().map(ModuleDescriptor::name).collect(Collectors.toList());
@@ -620,7 +623,7 @@ class ConfigImpl {
             for (URL url : classpaths) {
                 dynamic.add(url);
             }
-        } else if (classpaths.size() > 0) {
+        } else if (!classpaths.isEmpty()) {
             contextClassLoader = new URLClassLoader("classpath", classpaths.toArray(new URL[classpaths.size()]),
                             contextClassLoader);
         }
@@ -666,7 +669,7 @@ class ConfigImpl {
             }
         }
 
-        if (moduleNames.size() > 0) {
+        if (!moduleNames.isEmpty()) {
             contextClassLoader = layer.findLoader(moduleNames.get(0));
         }
 
@@ -710,6 +713,7 @@ class ConfigImpl {
             try {
                 t.join();
             } catch (InterruptedException e) {
+                logger.log(WARNING, e.getMessage(), e);
             }
         }
     }

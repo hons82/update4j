@@ -45,6 +45,8 @@ import org.update4j.inject.Injectable;
 import org.update4j.inject.PostInject;
 import org.update4j.mapper.ConfigMapper;
 import org.update4j.mapper.FileMapper;
+import org.update4j.service.DefaultLauncher;
+import org.update4j.service.DefaultUpdateHandler;
 import org.update4j.service.Launcher;
 import org.update4j.service.UpdateHandler;
 import org.update4j.util.FileUtils;
@@ -1592,7 +1594,7 @@ public class Configuration {
                 try {
                     Files.deleteIfExists(file.getPath());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
                     delayedDelete.add(file.getPath());
                 }
             } else {
@@ -2101,38 +2103,23 @@ public class Configuration {
         try {
             write(out);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(WARNING, "Failed to write configuration file", e);
         }
 
         return out.toString();
     }
 
-    /**
-     * Returns whether the given configuration is equals to this. More formally:
-     * 
-     * <pre>
-     * this.equals(other) == this.toString().equals(other.toString())
-     * </pre>
-     * 
-     * @return Whether the given configuration is equals to this.
-     */
     @Override
-    public boolean equals(Object other) {
-        if (other == null || !(other instanceof Configuration)) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Configuration)) return false;
+        Configuration that = (Configuration) o;
+        return Objects.equals(this.mapper, that.mapper);
+    }
 
-        Configuration otherConfig = (Configuration) other;
-        if (getTimestamp() == null) {
-            if (otherConfig.getTimestamp() != null)
-                return false;
-        } else {
-            if (!getTimestamp().equals(otherConfig.getTimestamp())) {
-                return false;
-            }
-        }
-
-        return toString().equals(other.toString());
+    @Override
+    public int hashCode() {
+        return Objects.hash(mapper);
     }
 
     /**

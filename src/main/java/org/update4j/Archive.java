@@ -83,7 +83,7 @@ public class Archive {
                                                 .filter(file -> file.getNormalizedPath()
                                                                 .toString()
                                                                 .replace("\\", "/")
-                                                                .equals(p.toString()))
+                                                                .equals(p))
                                                 .findAny()
                                                 .orElseThrow(() -> new IllegalStateException(p
                                                                 + ": Archive entry cannot be linked to a file in the configuration")))

@@ -47,6 +47,8 @@ import org.update4j.util.FileUtils;
  */
 public class SingleInstanceManager {
 
+    private static final System.Logger logger = System.getLogger(SingleInstanceManager.class.getName());
+
     private SingleInstanceManager() {
     }
 
@@ -332,20 +334,18 @@ public class SingleInstanceManager {
 
                 ServerSocket server = new ServerSocket(0, 0, InetAddress.getByName(null));
 
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    public void run() {
-                        try {
-                            lock.release();
-                            server.close();
-                            randomAccess.close();
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+					try {
+						lock.release();
+						server.close();
+						randomAccess.close();
 
-                            Files.delete(lockFile);
-                            Files.delete(portFile);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+						Files.delete(lockFile);
+						Files.delete(portFile);
+					} catch (IOException e) {
+						logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
+					}
+				}));
 
                 try (BufferedWriter out = Files.newBufferedWriter(portFile, StandardOpenOption.CREATE)) {
                     out.write("" + server.getLocalPort());
@@ -366,9 +366,9 @@ public class SingleInstanceManager {
                             }
                         } catch (SocketException e) {
                             if (!server.isClosed()) // otherwise it's normal on shutdown
-                                e.printStackTrace();
+                                logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
                         }
                     }
                 }, "Instance Message Dispatcher");
@@ -396,13 +396,13 @@ public class SingleInstanceManager {
                     }
 
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    logger.log(System.Logger.Level.WARNING, e1.getMessage(), e1);
                 }
 
                 throw new SingleInstanceException();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
         }
     }
 }

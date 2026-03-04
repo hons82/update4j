@@ -47,26 +47,26 @@ public class DefaultUpdateHandler implements UpdateHandler {
     }
 
     @Override
-    public void startDownloads() throws Throwable {
+    public void startDownloads() {
         total = context.getRequiresUpdate().size();
         ordinalWidth = String.valueOf(total).length() * 2 + 1;
         initProgress();
     }
     
     @Override
-    public void startDownloadFile(FileMetadata file) throws Throwable {
+    public void startDownloadFile(FileMetadata file) {
         index++;
         println(renderFilename(file));
         resetProgress(file.getSize());
     }
 
     @Override
-    public void updateDownloadFileProgress(FileMetadata file, float frac) throws Throwable {
+    public void updateDownloadFileProgress(FileMetadata file, float frac) {
         currentFrac = frac;
     }
 
     @Override
-    public void doneDownloadFile(FileMetadata file, Path tempFile) throws Throwable {
+    public void doneDownloadFile(FileMetadata file, Path tempFile) {
         clear();
     }
 
@@ -118,7 +118,8 @@ public class DefaultUpdateHandler implements UpdateHandler {
 
         timer = new Timer("Progress Printer", true);
         timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
+            @Override
+			public void run() {
                 if (stopTimer) {
                     timer.cancel();
                     return;

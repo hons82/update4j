@@ -30,8 +30,8 @@ public interface Service extends Injectable {
         return 0L;
     }
 
-    public static <T extends Service> T loadService(ModuleLayer layer, ClassLoader classLoader, Class<T> type,
-                    String classname) {
+    static <T extends Service> T loadService(ModuleLayer layer, ClassLoader classLoader, Class<T> type,
+		String classname) {
         if (classname != null && !StringUtils.isClassName(classname)) {
             throw new IllegalArgumentException(classname + " is not a valid Java class name.");
         }
@@ -102,31 +102,31 @@ public interface Service extends Injectable {
         }
     }
 
-    public static <T extends Service> T loadService(ModuleLayer layer, ClassLoader classLoader, Class<T> type) {
+    static <T extends Service> T loadService(ModuleLayer layer, ClassLoader classLoader, Class<T> type) {
         return loadService(layer, classLoader, type, null);
     }
 
-    public static <T extends Service> T loadService(ModuleLayer layer, Class<T> type, String classname) {
+    static <T extends Service> T loadService(ModuleLayer layer, Class<T> type, String classname) {
         return loadService(layer, null, type, classname);
     }
 
-    public static <T extends Service> T loadService(ModuleLayer layer, Class<T> type) {
+    static <T extends Service> T loadService(ModuleLayer layer, Class<T> type) {
         return loadService(layer, null, type, null);
     }
 
-    public static <T extends Service> T loadService(ClassLoader classLoader, Class<T> type, String classname) {
+    static <T extends Service> T loadService(ClassLoader classLoader, Class<T> type, String classname) {
         return loadService(null, classLoader, type, classname);
     }
 
-    public static <T extends Service> T loadService(ClassLoader classLoader, Class<T> type) {
+    static <T extends Service> T loadService(ClassLoader classLoader, Class<T> type) {
         return loadService(null, classLoader, type, null);
     }
 
-    public static <T extends Service> T loadService(Class<T> type, String classname) {
+    static <T extends Service> T loadService(Class<T> type, String classname) {
         return loadService(null, null, type, classname);
     }
 
-    public static <T extends Service> T loadService(Class<T> type) {
+    static <T extends Service> T loadService(Class<T> type) {
         return loadService(type, null);
     }
 

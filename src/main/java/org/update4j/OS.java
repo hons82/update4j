@@ -35,7 +35,7 @@ public enum OS {
             CURRENT = OTHER;
     }
 
-    private String name;
+    private final String name;
 
     OS(String name) {
         this.name = name;

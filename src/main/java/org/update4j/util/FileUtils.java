@@ -45,9 +45,12 @@ import java.util.stream.Collectors;
 import java.util.zip.Adler32;
 import java.util.zip.ZipFile;
 
+import org.update4j.Configuration;
 import org.update4j.OS;
 
 public class FileUtils {
+
+    private static final System.Logger logger = System.getLogger(FileUtils.class.getName());
 
     public static final Pattern OS_PATTERN = Pattern.compile(".+-(linux|win|mac)(?:-(.+))?\\.[^.]+$");
 
@@ -225,8 +228,7 @@ public class FileUtils {
             Files.createDirectories(path.getParent());
         }
         
-        try (Writer out = Files.newBufferedWriter(path,
-                        exists ? StandardOpenOption.APPEND : StandardOpenOption.CREATE)) {
+        try (Writer ignored = Files.newBufferedWriter(path, exists ? StandardOpenOption.APPEND : StandardOpenOption.CREATE)) {
         } finally {
             if (!exists)
                 Files.deleteIfExists(path);
@@ -278,7 +280,7 @@ public class FileUtils {
             try {
                 pb.start();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
             }
         }));
     }

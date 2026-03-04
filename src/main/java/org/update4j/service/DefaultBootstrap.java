@@ -45,6 +45,7 @@ import org.update4j.util.ArgUtils;
 
 public class DefaultBootstrap implements Delegate {
 
+    private static final System.Logger logger = System.getLogger(DefaultBootstrap.class.getName());
     private static final String OLD_CONFIG = "config.old";
 
     private String remote;
@@ -250,14 +251,13 @@ public class DefaultBootstrap implements Delegate {
                 archive.install();
                 newConfig.deleteOldFiles(oldConfig);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
             }
         }
 
         Configuration localConfig = getLocalConfig(false);
         if (localConfig != null && !localConfig.requiresUpdate()) {
-            Configuration finalConfig = localConfig;
-            Thread localApp = new Thread(() -> finalConfig.launch(this));
+			Thread localApp = new Thread(() -> localConfig.launch(this));
             localApp.start();
         } else {
             syncLocal = true;
@@ -311,11 +311,11 @@ public class DefaultBootstrap implements Delegate {
             }
         } catch (NoSuchFileException e) {
             if (!ignoreFileNotFound) {
-                e.printStackTrace();
+                logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
             }
         } catch (Exception e) {
             // All exceptions just returns null, never fail
-            e.printStackTrace();
+            logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
         }
 
         return null;
@@ -330,7 +330,7 @@ public class DefaultBootstrap implements Delegate {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
 
         }
 
@@ -347,7 +347,7 @@ public class DefaultBootstrap implements Delegate {
                 remoteConfig.write(out);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(System.Logger.Level.WARNING, e.getMessage(), e);
         }
     }
 

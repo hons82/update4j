@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.update4j.util.FileUtils;
 import org.update4j.util.FilenameMatch;
 
-import java.io.File;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 

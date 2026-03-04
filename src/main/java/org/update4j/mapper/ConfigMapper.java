@@ -27,6 +27,7 @@ import java.security.SignatureException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -91,17 +92,22 @@ public class ConfigMapper extends XmlMapper {
 
         for (int i = 0; i < children.getLength(); i++) {
             Node n = children.item(i);
-            if ("base".equals(n.getNodeName())) {
-                baseUri = getAttributeValue(n, "uri");
-                basePath = getAttributeValue(n, "path");
-            } else if ("provider".equals(n.getNodeName())) {
-                updateHandler = getAttributeValue(n, "updateHandler");
-                launcher = getAttributeValue(n, "launcher");
-            } else if ("properties".equals(n.getNodeName())) {
-                parseProperties(n.getChildNodes());
-            } else if ("files".equals(n.getNodeName())) {
-                parseFiles(n.getChildNodes());
-            }
+			switch (n.getNodeName()) {
+				case "base":
+					baseUri = getAttributeValue(n, "uri");
+					basePath = getAttributeValue(n, "path");
+					break;
+				case "provider":
+					updateHandler = getAttributeValue(n, "updateHandler");
+					launcher = getAttributeValue(n, "launcher");
+					break;
+				case "properties":
+					parseProperties(n.getChildNodes());
+					break;
+				case "files":
+					parseFiles(n.getChildNodes());
+					break;
+			}
         }
 
     }
@@ -142,10 +148,10 @@ public class ConfigMapper extends XmlMapper {
 
         // Since anybody can modify these fields, we don't take chances and escape them
         if (timestamp != null) {
-            builder.append(" timestamp=\"" + escape(timestamp) + "\"");
+            builder.append(" timestamp=\"").append(escape(timestamp)).append("\"");
         }
         if (signature != null) {
-            builder.append(" signature=\"" + escape(signature) + "\"");
+            builder.append(" signature=\"").append(escape(signature)).append("\"");
         }
 
         String children = getChildrenXml();
@@ -175,10 +181,10 @@ public class ConfigMapper extends XmlMapper {
             builder.append("    <base");
 
             if (baseUri != null) {
-                builder.append(" uri=\"" + escape(baseUri) + "\"");
+                builder.append(" uri=\"").append(escape(baseUri)).append("\"");
             }
             if (basePath != null) {
-                builder.append(" path=\"" + escape(basePath) + "\"");
+                builder.append(" path=\"").append(escape(basePath)).append("\"");
             }
 
             builder.append("/>\n");
@@ -187,10 +193,10 @@ public class ConfigMapper extends XmlMapper {
             builder.append("    <provider");
 
             if (updateHandler != null) {
-                builder.append(" updateHandler=\"" + escape(updateHandler) + "\"");
+                builder.append(" updateHandler=\"").append(escape(updateHandler)).append("\"");
             }
             if (launcher != null) {
-                builder.append(" launcher=\"" + escape(launcher) + "\"");
+                builder.append(" launcher=\"").append(escape(launcher)).append("\"");
             }
 
             builder.append("/>\n");
@@ -202,11 +208,11 @@ public class ConfigMapper extends XmlMapper {
             for (Property p : properties) {
                 builder.append("        <property");
 
-                builder.append(" key=\"" + escape(p.getKey()) + "\"");
-                builder.append(" value=\"" + escape(p.getValue()) + "\"");
+                builder.append(" key=\"").append(escape(p.getKey())).append("\"");
+                builder.append(" value=\"").append(escape(p.getValue())).append("\"");
 
                 if (p.getOs() != null)
-                    builder.append(" os=\"" + p.getOs().getShortName() + "\"");
+                    builder.append(" os=\"").append(p.getOs().getShortName()).append("\"");
 
                 builder.append("/>\n");
             }
@@ -288,4 +294,34 @@ public class ConfigMapper extends XmlMapper {
         writer.write(toXml());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ConfigMapper)) return false;
+
+        ConfigMapper that = (ConfigMapper) o;
+
+        return Objects.equals(timestamp, that.timestamp)
+            && Objects.equals(signature, that.signature)
+            && Objects.equals(baseUri, that.baseUri)
+            && Objects.equals(basePath, that.basePath)
+            && Objects.equals(updateHandler, that.updateHandler)
+            && Objects.equals(launcher, that.launcher)
+            && Objects.equals(properties, that.properties)
+            && Objects.equals(files, that.files);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+            timestamp,
+            signature,
+            baseUri,
+            basePath,
+            updateHandler,
+            launcher,
+            properties,
+            files
+        );
+    }
 }

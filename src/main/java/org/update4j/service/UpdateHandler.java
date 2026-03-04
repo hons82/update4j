@@ -122,22 +122,16 @@ public interface UpdateHandler extends Service {
      * 
      * @param context
      *            Check the state of the update with this object.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void init(UpdateContext context) throws Throwable {
+    default void init(UpdateContext context) {
     }
 
     /**
      * Called after {@link #init(UpdateContext)}, just before starting to check for
      * updates.
-     * 
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
+     *
      */
-    default void startCheckUpdates() throws Throwable {
+    default void startCheckUpdates() {
     }
 
     /**
@@ -162,11 +156,8 @@ public interface UpdateHandler extends Service {
      * 
      * @param file
      *            The file that will soon be checked if outdated.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void startCheckUpdateFile(FileMetadata file) throws Throwable {
+    default void startCheckUpdateFile(FileMetadata file) {
     }
 
     /**
@@ -177,11 +168,8 @@ public interface UpdateHandler extends Service {
      *            The file that was just checked.
      * @param requires
      *            Whether this file in fact requires an update.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void doneCheckUpdateFile(FileMetadata file, boolean requires) throws Throwable {
+    default void doneCheckUpdateFile(FileMetadata file, boolean requires) {
     }
 
     /**
@@ -194,33 +182,24 @@ public interface UpdateHandler extends Service {
      * @param frac
      *            A value from {@code 0f} to {@code 1f} representing the percent of
      *            the job done.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void updateCheckUpdatesProgress(float frac) throws Throwable {
+    default void updateCheckUpdatesProgress(float frac) {
     }
 
     /**
      * All files were passed for an update check (or not, if
      * {@link #shouldCheckForUpdate(FileMetadata)} returned {@code false}) and the
      * {@link UpdateContext#getRequiresUpdate()} is up-to-date.
-     * 
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
+     *
      */
-    default void doneCheckUpdates() throws Throwable {
+    default void doneCheckUpdates() {
     }
 
     /**
      * If there are any files that need an update, this method will get called once.
-     * 
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
+     *
      */
-    default void startDownloads() throws Throwable {
+    default void startDownloads() {
     }
 
     /**
@@ -264,11 +243,8 @@ public interface UpdateHandler extends Service {
      * 
      * @param file
      *            The file that will now be downloaded.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void startDownloadFile(FileMetadata file) throws Throwable {
+    default void startDownloadFile(FileMetadata file) {
     }
 
     /**
@@ -286,11 +262,8 @@ public interface UpdateHandler extends Service {
      * @param frac
      *            A value from {@code 0f} to {@code 1f} representing the percent of
      *            the job done.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void updateDownloadFileProgress(FileMetadata file, float frac) throws Throwable {
+    default void updateDownloadFileProgress(FileMetadata file, float frac) {
     }
 
     /**
@@ -302,11 +275,8 @@ public interface UpdateHandler extends Service {
      * @param frac
      *            A value from {@code 0f} to {@code 1f} representing the percent of
      *            the job done.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void updateDownloadProgress(float frac) throws Throwable {
+    default void updateDownloadProgress(float frac) {
     }
 
     /**
@@ -323,11 +293,8 @@ public interface UpdateHandler extends Service {
      * @param path
      *            The actual file, only moved to its final location once all
      *            downloads succeed. In archive-based updates, the path is inside the archive.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void validatingFile(FileMetadata file, Path path) throws Throwable {
+    default void validatingFile(FileMetadata file, Path path) {
     }
 
     /**
@@ -345,11 +312,8 @@ public interface UpdateHandler extends Service {
      *            The temporary location of the file, only moved to its final
      *            location once all downloads succeed.
      *            In archive-based updates, the path is inside the archive.
-     * @throws Throwable
-     *             Freely throw any exception, it will gracefully terminate the
-     *             update process and revert any file changes.
      */
-    default void doneDownloadFile(FileMetadata file, Path path) throws Throwable {
+    default void doneDownloadFile(FileMetadata file, Path path) {
     }
 
     /**
@@ -371,12 +335,9 @@ public interface UpdateHandler extends Service {
      * <p>
      * This method will only be called if there were actually files that required
      * updates.
-     * 
-     * @throws Throwable
-     *             Any exception will be passed to {@link #failed(Throwable)} and
-     *             the {@code update()} method will return false.
+     *
      */
-    default void doneDownloads() throws Throwable {
+    default void doneDownloads() {
     }
 
     /**

@@ -54,7 +54,7 @@ import java.util.Map;
  */
 public interface Injectable {
 
-    public static void injectBidirectional(Injectable obj1, Injectable obj2)
+    static void injectBidirectional(Injectable obj1, Injectable obj2)
                     throws UnsatisfiedInjectionException, IllegalAccessException, InvocationTargetException {
         Map<String, Object> sources1 = getSourceObjects(obj1);
         Map<String, Object> sources2 = getSourceObjects(obj2);
@@ -67,7 +67,7 @@ public interface Injectable {
 
     }
 
-    public static void injectUnidirectional(Injectable source, Injectable target)
+    static void injectUnidirectional(Injectable source, Injectable target)
                     throws IllegalAccessException, UnsatisfiedInjectionException, InvocationTargetException {
         Map<String, Object> sourceObjects = getSourceObjects(source);
         injectValues(target, sourceObjects);
